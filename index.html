@@ -54,7 +54,7 @@
     }
 
     function jump() {
-      if (!running) { resetGame(); requestAnimationFrame(loop); return; }
+      if (!running) { resetGame(); return; }
       if (!stickman.jumping) { stickman.vy = -12; stickman.jumping = true; }
     }
 
@@ -70,7 +70,7 @@
     }
 
     function drawStickman(sm) {
-      ctx.strokeStyle = '#000000´;
+      ctx.strokeStyle = '#000000';
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       const headR = 8;
