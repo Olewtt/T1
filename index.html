@@ -38,7 +38,7 @@
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
     const highscoreEl = document.getElementById('highscore');
-    const GROUND_Y = 240; // gemeinsame Bodenlinie für Stickman-Füße und Hindernis-Basis
+    const GROUND_Y = 240; // exakte Bodenlinie: hier stehen Füße UND Hindernisbasis
     let highscore = 0;
     let stickman, obstacles, score, gameSpeed, running, spawnTimer, animTime;
 
@@ -65,19 +65,20 @@
     canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
 
     function spawnObstacle() {
-      // kleinere Hindernisse: Höhe 12-24px statt 30-60px, schmaler
-      const height = 12 + Math.random() * 12;
-      obstacles.push({ x: canvas.width, y: GROUND_Y - height, width: 12, height: height });
+      // Kleine Hindernisse, klar niedriger als der Stickman (50px hoch)
+      const height = 10 + Math.random() * 10; // 10-20px
+      obstacles.push({ x: canvas.width, y: GROUND_Y - height, width: 10, height: height });
     }
 
     function drawStickman(sm) {
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 3;
-      ctx.lineCap = 'round';
       const headR = 8;
       const bodyTop = sm.y - sm.height + headR * 2;
       const bodyBottom = sm.y - 12;
       const centerX = sm.x + sm.width / 2;
+
+      ctx.lineCap = 'round';
 
       ctx.beginPath();
       ctx.arc(centerX, sm.y - sm.height + headR, headR, 0, Math.PI * 2);
@@ -95,6 +96,9 @@
       ctx.moveTo(centerX, bodyTop + 8);
       ctx.lineTo(centerX + 12, bodyTop + 20 - armSwing);
       ctx.stroke();
+
+      // Beine: 'butt'-Enden statt 'round', damit die Füße exakt auf der Bodenlinie aufsetzen
+      ctx.lineCap = 'butt';
 
       if (sm.jumping) {
         ctx.beginPath();
@@ -118,8 +122,8 @@
       ctx.strokeStyle = '#000000';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(0, GROUND_Y);
-      ctx.lineTo(canvas.width, GROUND_Y);
+      ctx.moveTo(0, GROUND_Y + 1); // +1, damit die Linie nicht mit den Füßen verschmilzt
+      ctx.lineTo(canvas.width, GROUND_Y + 1);
       ctx.stroke();
     }
 
@@ -191,4 +195,4 @@
     loop();
   </script>
 </body>
-</html>
+</html>  
